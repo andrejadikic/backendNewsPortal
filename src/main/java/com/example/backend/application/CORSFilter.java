@@ -1,4 +1,4 @@
-package rs.raf.demo;
+package com.example.backend.application;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -8,7 +8,7 @@ import java.io.IOException;
 
 @Provider
 public class CORSFilter implements ContainerResponseFilter {
-    @Override
+    //@Override
     public void filter(ContainerRequestContext containerRequestContext, ContainerResponseContext containerResponseContext) throws IOException {
         containerResponseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
         containerResponseContext.getHeaders().add("Access-Control-Allow-Headers", "*");

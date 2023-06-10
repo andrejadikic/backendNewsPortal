@@ -1,8 +1,9 @@
-package com.example.backend.model.article;
+package com.example.backend.adapter.http.article;
 
 import com.example.backend.application.*;
 import com.example.backend.application.dto.ArticleUpdateDto;
-import com.example.backend.application.dto.TokenInfo;
+import com.example.backend.model.article.Article;
+import com.example.backend.model.article.ArticleService;
 import com.example.backend.model.user.security.*;
 import com.google.common.net.HttpHeaders;
 import javax.inject.Inject;
@@ -14,7 +15,7 @@ import java.util.List;
 
 
 @Path("/articles")
-public class ArticleController {
+public class ArticleHttpAdapter {
 
     @Inject
     private ArticleService articleService;
@@ -37,6 +38,29 @@ public class ArticleController {
     public Response getByTitle(@PathParam("text") String text, @QueryParam("categoryId") Integer categoryId){
         try{
             return Response.status(200).entity(this.articleService.getByName(text, categoryId)).build();
+        }catch (Exception e){
+            return Response.status(500).entity(Constants.INTERNAL_ERROR).build();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/byPage/{page}")
+    public Response getByPage(@PathParam("page") Integer page){
+        try{
+            return Response.status(200).entity(this.articleService.getbyPage(page)).build();
+        }catch (Exception e){
+            return Response.status(500).entity(Constants.INTERNAL_ERROR).build();
+        }
+    }
+
+
+    @GET
+    @Path("/most-read/byPage/{page}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMostReadByPage(@PathParam("page") Integer page){
+        try{
+            return Response.status(200).entity(this.articleService.mostRead(page)).build();
         }catch (Exception e){
             return Response.status(500).entity(Constants.INTERNAL_ERROR).build();
         }
@@ -86,16 +110,7 @@ public class ArticleController {
         }
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/most-reacted")
-    public Response getMostReacted() {
-        try{
-            return Response.status(200).entity(this.articleService.mostReacted()).build();
-        }catch (Exception e){
-            return Response.status(500).entity(Constants.INTERNAL_ERROR).build();
-        }
-    }
+
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)

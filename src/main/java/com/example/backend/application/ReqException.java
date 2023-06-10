@@ -1,4 +1,4 @@
-package rs.raf.demo.enums;
+package com.example.backend.application;
 
 public class ReqException extends Exception{
 

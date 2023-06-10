@@ -1,12 +1,18 @@
-package rs.raf.demo.models;
+package com.example.backend.model.user;
 
-import rs.raf.demo.enums.Constants;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.swing.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class User {
 
     private Integer id;
@@ -29,8 +35,6 @@ public class User {
     @NotNull(message = "User activity is missing")
     private boolean active;
 
-    public User(){}
-
     public User(Integer id, String email, String name, String surname, String type, String password) {
         this.id = id;
         this.email = email;
@@ -41,79 +45,17 @@ public class User {
         this.active = true;
     }
 
-    public User(Integer id, String email, String name, String surname, String password) {
-        this.id = id;
+    public User(String email, String name, String surname, String password) {
         this.email = email;
         this.name = name;
         this.surname = surname;
         this.password = password;
-        this.type = Constants.UserType.CREATOR;
+        this.type = UserType.CREATOR;
         this.active = true;
     }
 
-    public User(Integer id, String email, String name, String surname, String type, String password, boolean active) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
-        this.type = type;
-        this.password = password;
-        this.active = active;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+    public static class UserType {
+        public static final String CREATOR = "content_creator";
+        public static final String ADMIN = "admin";
     }
 }

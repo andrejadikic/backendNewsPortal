@@ -1,5 +1,9 @@
-package com.example.backend.model.category;
+package com.example.backend.adapter.http.category;
 
+import com.example.backend.application.*;
+import com.example.backend.model.category.Category;
+import com.example.backend.model.category.CategoryService;
+import com.example.backend.model.user.security.SecurityService;
 import com.google.common.net.HttpHeaders;
 
 import javax.inject.Inject;
@@ -9,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/categories")
-public class CategoryController {
+public class CategoryHttpAdapter {
 
     @Inject
     private CategoryService categoryService;

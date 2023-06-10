@@ -1,4 +1,4 @@
-package com.example.backend.model.category.repository;
+package com.example.backend.adapter.mysql.category;
 
 import com.example.backend.application.MySqlAbstractRepository;
 import com.example.backend.model.category.Category;
@@ -33,7 +33,7 @@ public class MySqlCategoryRepository extends MySqlAbstractRepository implements 
     }
 
     @Override
-    public Category addOne(Category category) {
+    public Category add(Category category) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -62,7 +62,7 @@ public class MySqlCategoryRepository extends MySqlAbstractRepository implements 
     }
 
     @Override
-    public Category getOne(Integer id) {
+    public Category get(Integer id) {
         Category category = null;
 
         Connection connection = null;
@@ -95,7 +95,7 @@ public class MySqlCategoryRepository extends MySqlAbstractRepository implements 
     }
 
     @Override
-    public void deleteOne(Integer id) {
+    public void delete(Integer id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -116,7 +116,7 @@ public class MySqlCategoryRepository extends MySqlAbstractRepository implements 
     }
 
     @Override
-    public Category getOne(String name) {
+    public Category get(String name) {
         Category category = null;
 
         Connection connection = null;
@@ -149,7 +149,7 @@ public class MySqlCategoryRepository extends MySqlAbstractRepository implements 
     }
 
     @Override
-    public void updateOne(Integer id, Category category) {
+    public void update(Integer id, Category category) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try{

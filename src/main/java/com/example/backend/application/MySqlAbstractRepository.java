@@ -1,4 +1,4 @@
-package rs.raf.demo.repositories;
+package com.example.backend.application;
 
 import java.sql.*;
 import java.util.Optional;
@@ -28,7 +28,7 @@ abstract public class MySqlAbstractRepository {
     }
 
     protected String getDatabaseName() {
-        return "test_schema";
+        return "news";
     }
 
     protected String getUsername() {
@@ -36,7 +36,7 @@ abstract public class MySqlAbstractRepository {
     }
 
     protected String getPassword() {
-        return "123123123";
+        return "123123";
     }
 
     protected void closeStatement(Statement statement) {
@@ -51,6 +51,7 @@ abstract public class MySqlAbstractRepository {
         try {
             Optional.of(resultSet).get().close();
         } catch (Exception throwables) {
+            System.out.println("CloseResultSet");
             throwables.printStackTrace();
         }
     }

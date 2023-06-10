@@ -1,4 +1,4 @@
-package com.example.backend.model.security;
+package com.example.backend.model.user.security;
 
 
 import com.example.backend.application.dto.*;
@@ -16,8 +16,9 @@ public class AuthService {
 
     public String login(LoginDto dto) throws Exception {
        try {
-           User user = this.userRepository.getOne(dto.getEmail(), this.hashPassword(dto.getPassword()));
+           User user = this.userRepository.get(dto.getEmail(), this.hashPassword(dto.getPassword()));
            if(user == null) throw new ReqException("Invalid credentials", 400);
+           if(!user.isActive()) throw new ReqException("Your account is inactive", 400);
            return JWT.createToken(new TokenInfo(user));
        }catch (ReqException e){
            throw new ReqException(e.getMessage(), e.getCode());
@@ -28,14 +29,10 @@ public class AuthService {
 
     public String register(RegisterDto dto) throws Exception {
         try {
-            User existingUser = this.userRepository.getOne(dto.getEmail());
+            User existingUser = this.userRepository.get(dto.getEmail());
             if (existingUser != null) throw new ReqException("User with the same email already exists", 400);
-            User newUser = new User();
-            newUser.setName(dto.getName());
-            newUser.setSurname(dto.getSurname());
-            newUser.setEmail(dto.getEmail());
-            newUser.setPassword(this.hashPassword(dto.getPassword()));
-            this.userRepository.addOne(newUser);
+            User newUser = new User(dto.getEmail(),dto.getName(), dto.getSurname(),hashPassword(dto.getPassword()));
+            this.userRepository.add(newUser);
             return JWT.createToken(new TokenInfo(newUser));
         }catch (ReqException e){
             throw new ReqException(e.getMessage(), e.getCode());
@@ -45,7 +42,7 @@ public class AuthService {
     }
 
     public String hashPassword(String password) {
-      return Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
+        return Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
     }
 
 }

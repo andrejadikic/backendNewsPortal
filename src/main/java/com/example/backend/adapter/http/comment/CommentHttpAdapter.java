@@ -1,14 +1,14 @@
-package com.example.backend.model.comment;
+package com.example.backend.adapter.http.comment;
 
+import com.example.backend.application.Constants;
+import com.example.backend.application.ReqException;
+import com.example.backend.application.dto.TokenInfo;
+import com.example.backend.model.comment.Comment;
+import com.example.backend.model.comment.CommentService;
+import com.example.backend.model.user.User;
+import com.example.backend.model.user.UserService;
+import com.example.backend.model.user.security.SecurityService;
 import com.google.common.net.HttpHeaders;
-import rs.raf.demo.dto.TokenInfo;
-import rs.raf.demo.enums.Constants;
-import rs.raf.demo.enums.ReqException;
-import rs.raf.demo.models.Like;
-import rs.raf.demo.models.Comment;
-import rs.raf.demo.models.User;
-import rs.raf.demo.security.SecurityService;
-import rs.raf.demo.user.UserService;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -17,7 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/comments")
-public class CommentController {
+public class CommentHttpAdapter {
 
     @Inject
     private CommentService commentService;
@@ -80,22 +80,6 @@ public class CommentController {
             this.securityService.verifyAdmin(token);
             this.commentService.deleteOne(id);
             return Response.status(200).entity("Success").build();
-        }catch (ReqException reqException){
-            return Response.status(reqException.getCode()).entity(reqException.getMessage()).build();
-        }catch (Exception e){
-            return Response.status(500).entity(Constants.INTERNAL_ERROR).build();
-        }
-    }
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/like")
-    public Response likeOne(@HeaderParam(HttpHeaders.AUTHORIZATION) String token, @Valid Like like){
-        try{
-             TokenInfo info = this.securityService.verify(token);
-             like.setUserId(info.getId());
-             like.setEntityType(Constants.EntityType.COMMENT);
-             return Response.status(200).entity(this.commentService.likeOne(like, info.getId())).build();
         }catch (ReqException reqException){
             return Response.status(reqException.getCode()).entity(reqException.getMessage()).build();
         }catch (Exception e){

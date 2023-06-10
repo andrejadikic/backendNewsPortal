@@ -1,6 +1,7 @@
-package rs.raf.demo.dto;
+package com.example.backend.application.dto;
 
-import rs.raf.demo.models.User;
+
+import com.example.backend.model.user.User;
 
 public class TokenInfo {
     

@@ -1,4 +1,4 @@
-package rs.raf.demo.dto;
+package com.example.backend.application.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

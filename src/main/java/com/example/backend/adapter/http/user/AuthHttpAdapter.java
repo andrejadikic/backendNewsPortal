@@ -1,7 +1,8 @@
-package com.example.backend.model.security;
+package com.example.backend.adapter.http.user;
 
 import com.example.backend.application.dto.*;
 import com.example.backend.application.*;
+import com.example.backend.model.user.security.AuthService;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -12,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/")
-public class AuthController {
+public class AuthHttpAdapter {
 
     @Inject
     private AuthService authService;
@@ -40,6 +41,7 @@ public class AuthController {
         } catch (ReqException e) {
             return Response.status(e.getCode()).entity(e.getMessage()).build();
         }catch (Exception e){
+            System.out.println(dto);
             return Response.status(500).entity(Constants.INTERNAL_ERROR).build();
         }
     }

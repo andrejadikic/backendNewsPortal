@@ -1,9 +1,8 @@
-package com.example.backend.model.user.repository;
+package com.example.backend.adapter.mysql.user;
 
-import rs.raf.demo.dto.update.UserUpdateDto;
-import rs.raf.demo.enums.Constants;
-import rs.raf.demo.models.User;
-import rs.raf.demo.repositories.MySqlAbstractRepository;
+import com.example.backend.application.MySqlAbstractRepository;
+import com.example.backend.application.dto.*;
+import com.example.backend.model.user.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class MySqlUserRepository extends MySqlAbstractRepository implements UserRepository {
     @Override
-    public User addOne(User user) {
+    public User add(User user) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -25,13 +24,14 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
             preparedStatement.setString(3, user.getSurname());
             preparedStatement.setString(4, user.getType());
             preparedStatement.setString(5, user.getPassword());
-            preparedStatement.setBoolean(6, user.getType().equals(Constants.UserType.ADMIN) || user.isActive());
+            preparedStatement.setBoolean(6, user.getType().equals(User.UserType.ADMIN) || user.isActive());
             preparedStatement.executeUpdate();
+            System.out.println(preparedStatement.getGeneratedKeys());
             resultSet = preparedStatement.getGeneratedKeys();
 
             if(resultSet.next()){
                 user.setId(resultSet.getInt(1));
-                user.setType(Constants.UserType.CREATOR);
+                user.setType(User.UserType.CREATOR);
                 user.setActive(true);
             }
 
@@ -71,7 +71,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
     }
 
     @Override
-    public User getOne(Integer id) {
+    public User get(Integer id) {
         User user = null;
 
         Connection connection = null;
@@ -105,7 +105,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
     }
 
     @Override
-    public void deleteOne(Integer id) {
+    public void delete(Integer id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -126,7 +126,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
     }
 
     @Override
-    public User getOne(String email, String password) {
+    public User get(String email, String password) {
         User user = null;
 
         Connection connection = null;
@@ -159,7 +159,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
     }
 
     @Override
-    public User getOne(String email) {
+    public User get(String email) {
         User user = null;
 
         Connection connection = null;
@@ -193,7 +193,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
     }
 
     @Override
-    public void updateOne(Integer id, UserUpdateDto user) {
+    public void update(Integer id, UserUpdateDto user) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try{

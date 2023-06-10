@@ -1,16 +1,15 @@
-package com.example.backend.model.user.repository;
+package com.example.backend.model.user;
 
-import rs.raf.demo.dto.update.UserUpdateDto;
-import rs.raf.demo.models.User;
+import com.example.backend.application.dto.UserUpdateDto;
 
 import java.util.List;
 
 public interface UserRepository {
-    User addOne(User user);
+    User add(User user);
     List<User> getAll();
-    User getOne(Integer id);
-    void deleteOne(Integer id);
-    User getOne(String email, String password);
-    User getOne(String email);
-    void updateOne(Integer id, UserUpdateDto user);
+    User get(Integer id);
+    void delete(Integer id);
+    User get(String email, String password);
+    User get(String email);
+    void update(Integer id, UserUpdateDto user);
 }

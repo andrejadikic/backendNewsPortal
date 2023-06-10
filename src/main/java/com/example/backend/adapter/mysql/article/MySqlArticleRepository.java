@@ -1,8 +1,9 @@
-package com.example.backend.model.article.repository;
+package com.example.backend.adapter.mysql.article;
 
 import com.example.backend.application.MySqlAbstractRepository;
+import com.example.backend.application.dto.ArticleUpdateDto;
 import com.example.backend.model.article.Article;
-import org.checkerframework.checker.units.qual.A;
+import com.example.backend.model.article.ArticleRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,23 +20,24 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
             connection = this.newConnection();
             String[] generatedColumns = {"id"};
 
-            preparedStatement = connection.prepareStatement("INSERT INTO articles (title, text, created_at, viewCount, author, categoryId, tags) VALUES (?, ?,?, ?,?, ?, ?, ?, ?)", generatedColumns);
+            System.out.println(article);
+            preparedStatement = connection.prepareStatement("INSERT INTO articles (title, text, created_at, viewCount, author, categoryId, tags) VALUES (?, ?, ?, ?, ?, ?, ?)", generatedColumns);
             preparedStatement.setString(1, article.getTitle());
             preparedStatement.setString(2, article.getText());
             preparedStatement.setLong(3, System.currentTimeMillis());
-            preparedStatement.setLong(4, 0);
+            preparedStatement.setLong(4, 0L);
             preparedStatement.setString(5, article.getAuthor());
             preparedStatement.setInt(6, article.getCategoryId());
             preparedStatement.setString(7, article.getTags());
+            System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
+            System.out.println(preparedStatement);
             resultSet = preparedStatement.getGeneratedKeys();
 
             if(resultSet.next()){
                 article.setId(resultSet.getInt(1));
                 article.setViewCount(0L);
                 article.setCreated_At(System.currentTimeMillis());
-                article.setLikeCount(0L);
-                article.setDislikeCount(0L);
             }
 
         }catch (Exception e){
@@ -61,8 +63,7 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
             while (resultSet.next()){
                 articles.add(new Article(resultSet.getInt("id"), resultSet.getString("title"),
                         resultSet.getString("text"), resultSet.getString("author"), resultSet.getInt("categoryId"),
-                        resultSet.getString("tags"), resultSet.getLong("created_at"), resultSet.getLong("viewCount"),
-                        resultSet.getLong("likeCount"), resultSet.getLong("dislikeCount")));
+                        resultSet.getString("tags"), resultSet.getLong("created_at"), resultSet.getLong("viewCount")));
 
             }
         }catch (Exception e){
@@ -90,8 +91,7 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
                 articles.add(new Article(resultSet.getInt("id"), resultSet.getString("title"),resultSet.getString("text"),
                         resultSet.getString("author"),
                         resultSet.getInt("categoryId"), resultSet.getString("tags"), resultSet.getLong("created_at"),
-                        resultSet.getLong("viewCount"),
-                        resultSet.getLong("likeCount"), resultSet.getLong("dislikeCount") ));
+                        resultSet.getLong("viewCount") ));
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -119,8 +119,7 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
                 articles.add(new Article(resultSet.getInt("id"), resultSet.getString("title"),resultSet.getString("text"),
                         resultSet.getString("author"),
                         resultSet.getInt("categoryId"), resultSet.getString("tags"), resultSet.getLong("created_at"),
-                        resultSet.getLong("viewCount"),
-                        resultSet.getLong("likeCount"), resultSet.getLong("dislikeCount") ));
+                        resultSet.getLong("viewCount") ));
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -151,7 +150,7 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
     }
 
     @Override
-    public Article getOne(Integer id) {
+    public Article get(Integer id) {
         Article article = null;
 
         Connection connection = null;
@@ -168,7 +167,7 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
                 article = new Article(resultSet.getInt("id"), resultSet.getString("title"),
                         resultSet.getString("text"), resultSet.getString("author"),
                         resultSet.getInt("categoryId"),resultSet.getString("tags"), resultSet.getLong("created_at"),
-                        resultSet.getLong("viewCount"), resultSet.getLong("likeCount"), resultSet.getLong("dislikeCount"));
+                        resultSet.getLong("viewCount"));
             }
 
             resultSet.close();
@@ -186,7 +185,7 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
     }
 
     @Override
-    public void deleteOne(Integer id) {
+    public void delete(Integer id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -206,17 +205,18 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
         }
     }
     @Override
-    public void updateOne(Integer id, ArticleUpdateDto data) {
+    public void update(Integer id, ArticleUpdateDto data) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try{
             connection = this.newConnection();
-            preparedStatement = connection.prepareStatement("UPDATE articles SET title = ?, text = ?, author = ? , categoryId = ? WHERE id = ?");
+            preparedStatement = connection.prepareStatement("UPDATE articles SET title = ?, text = ?, author = ? , categoryId = ?, tags = ? WHERE id = ?");
             preparedStatement.setString(1, data.getTitle());
             preparedStatement.setString(2, data.getText());
             preparedStatement.setString(3, data.getAuthor());
             preparedStatement.setInt(4, data.getCategoryId());
-            preparedStatement.setInt(5, id);
+            preparedStatement.setString(5,data.getTags());
+            preparedStatement.setInt(6, id);
             preparedStatement.executeUpdate();
         }catch (Exception e){
             System.out.println(e.getMessage());

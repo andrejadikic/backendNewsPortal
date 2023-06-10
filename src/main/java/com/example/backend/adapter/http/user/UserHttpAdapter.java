@@ -1,12 +1,10 @@
-package com.example.backend.adapter;
+package com.example.backend.adapter.http.user;
 
-import com.example.backend.model.user.UserService;
+import com.example.backend.application.*;
+import com.example.backend.application.dto.UserUpdateDto;
+import com.example.backend.model.user.*;
+import com.example.backend.model.user.security.SecurityService;
 import com.google.common.net.HttpHeaders;
-import rs.raf.demo.dto.update.UserUpdateDto;
-import rs.raf.demo.enums.Constants;
-import rs.raf.demo.enums.ReqException;
-import rs.raf.demo.models.User;
-import rs.raf.demo.security.SecurityService;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -15,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/users")
-public class UserController {
+public class UserHttpAdapter {
 
     @Inject
     private UserService userService;
